@@ -62,23 +62,6 @@ jobs:
             --no-embed \
             --recursive filesystem
         working-directory: ./package
-
-      - run: uv venv --python=3.12
-        working-directory: ./package
-      - run: uv pip install "git+https://github.com/pyiron-node-store/hydrogenic"
-        working-directory: ./package
-      - run: uv pip install sim-atlas-toolkit
-        working-directory: ./package
-      - name: upload package
-        run: |
-          uv run sim-atlas-upload hydrogenic \
-            --api-url http://127.0.0.1:8000/api/v1 \
-            --api-token "$SIM_ATLAS_API_TOKEN" \
-            --module-allow flowrep \
-            --log-level debug \
-            --no-embed \
-            --recursive filesystem
-        working-directory: ./package
       - run: rm -rf package
 
       - name: Checkout tensile_test
