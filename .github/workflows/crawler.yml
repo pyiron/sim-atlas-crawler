@@ -65,7 +65,7 @@ jobs:
           environment-file: package/.ci_support/environment.yml
           condarc-file: .condarc
           python-version: 3.12
-      - run: pip install sim-atlas-toolkit
+      - run: pip install git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit
         working-directory: ./package
         shell: bash -l {0}
       - run: |
@@ -104,7 +104,7 @@ jobs:
           environment-file: package/.ci_support/environment.yml
           condarc-file: .condarc
           python-version: 3.12
-      - run: pip install sim-atlas-toolkit
+      - run: pip install git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit
         working-directory: ./package
         shell: bash -l {0}
       - run: |
@@ -133,7 +133,7 @@ jobs:
         working-directory: ./package
       - run: uv pip install "git+https://github.com/pyiron-node-store/hydrogenic"
         working-directory: ./package
-      - run: uv pip install sim-atlas-toolkit
+      - run: uv pip install git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit
         working-directory: ./package
       - name: upload package
         run: |
@@ -164,7 +164,7 @@ jobs:
           environment-file: package/.ci_support/environment.yml
           condarc-file: .condarc
           python-version: 3.12
-      - run: pip install sim-atlas-toolkit
+      - run: pip install git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit
         working-directory: ./package
         shell: bash -l {0}
       - run: |
@@ -204,7 +204,7 @@ jobs:
           environment-file: package/environment.yml
           condarc-file: .condarc
           python-version: 3.12
-      - run: pip install sim-atlas-toolkit
+      - run: pip install git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit
         working-directory: ./package
         shell: bash -l {0}
       - run: |
