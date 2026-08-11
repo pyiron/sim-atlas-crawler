@@ -88,11 +88,13 @@ jobs:
           python-version: 3.12
       - run: pip install sim-atlas-toolkit
         working-directory: ./package
+        shell: bash -l {0}
       - run: |
           which python
           which pip
-          which sim-atlas-toolkit
+          which sim-atlas-upload
           pip list
+        shell: bash -l {0}
       - name: upload package
         run: |
           sim-atlas-upload tensile_test \
@@ -104,6 +106,7 @@ jobs:
             --recursive filesystem
         env:
           PYTHONPATH: ${{ github.workspace }}/package
+        shell: bash -l {0}
       - run: rm -rf package
 
       # ---------------------------------------------------------------
@@ -119,7 +122,9 @@ jobs:
           activate-environment: pyiron_workflow_atomistics
       - name: Install packages
         run: conda install -n pyiron_workflow_atomistics -c conda-forge pyiron-workflow-atomistics -y
+        shell: bash -l {0}
       - run: pip install sim-atlas-toolkit
+        shell: bash -l {0}
       - name: upload package
         run: |
           uv run sim-atlas-upload pyiron_workflow_atomistics \
@@ -129,6 +134,7 @@ jobs:
             --log-level debug \
             --no-embed \
             --recursive filesystem
+        shell: bash -l {0}
       - run: rm -rf package
 
       - uses: actions/upload-artifact@v7
