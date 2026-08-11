@@ -73,7 +73,7 @@ jobs:
           channel-priority: strict
           activate-environment: pyiron_workflow_atomistics
       - name: Install packages
-        run: conda install -n pyiron_workflow_atomistics -c conda-forge pyiron_workflow_atomistics -y
+        run: conda install -n pyiron_workflow_atomistics -c conda-forge pyiron-workflow-atomistics -y
       - run: pip install sim-atlas-toolkit
       - name: upload package
         run: |
@@ -111,7 +111,8 @@ jobs:
             --log-level debug \
             --no-embed \
             --recursive filesystem
-        working-directory: ./package
+        env:
+          PYTHONPATH: ${{ github.workspace }}/package
       - run: rm -rf package
 
       - uses: actions/upload-artifact@v7
