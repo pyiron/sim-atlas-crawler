@@ -85,7 +85,7 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}/package
         shell: bash -l {0}
-      - run: rm -rf package
+      - run: rm -rf package/*
 
       # ---------------------------------------------------------------
       # pyiron_workflow_atomistics
@@ -133,7 +133,7 @@ jobs:
             --no-embed \
             --recursive filesystem
         working-directory: ./package
-      - run: rm -rf package
+      - run: rm -rf package/*
 
       # ---------------------------------------------------------------
       # tensile_test
@@ -173,7 +173,7 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}/package
         shell: bash -l {0}
-      - run: rm -rf package
+      - run: rm -rf package/*
 
       # ---------------------------------------------------------------
       # semantic_workflows
@@ -212,7 +212,7 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}/package
         shell: bash -l {0}
-      - run: rm -rf package
+      - run: rm -rf package/*
 
       - uses: actions/upload-artifact@v7
         with:
