@@ -78,7 +78,7 @@ jobs:
           repository: pyiron-node-store/tensile_test
           path: package
       - name: miniconda setup
-        uses: conda-incubator/setup-miniconda@v3
+        uses: conda-incubator/setup-miniconda@v4
         with:
           miniforge-version: latest
           activate-environment: damask-test
@@ -88,6 +88,11 @@ jobs:
           python-version: 3.12
       - run: pip install sim-atlas-toolkit
         working-directory: ./package
+      - run: |
+          which python
+          which pip
+          which sim-atlas-toolkit
+          pip list
       - name: upload package
         run: |
           sim-atlas-upload tensile_test \
@@ -105,7 +110,7 @@ jobs:
       # pyiron_workflow_atomistics
       # ---------------------------------------------------------------
       - name: Set up Miniconda
-        uses: conda-incubator/setup-miniconda@v3
+        uses: conda-incubator/setup-miniconda@v4
         with:
           python-version: "3.12"
           miniforge-version: latest
