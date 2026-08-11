@@ -49,6 +49,45 @@ jobs:
         working-directory: ./sim-atlas
 
       # ---------------------------------------------------------------
+      # pyiron_workflow_lammps
+      # ---------------------------------------------------------------
+      - name: Checkout pyiron_workflow_lammps
+        uses: actions/checkout@v7
+        with:
+          repository: pyiron/pyiron_workflow_lammps
+          path: package
+      - name: miniconda setup
+        uses: conda-incubator/setup-miniconda@v4
+        with:
+          miniforge-version: latest
+          activate-environment: pyiron_workflow_lammps
+          channel-priority: strict
+          environment-file: package/.ci_support/environment.yml
+          condarc-file: .condarc
+          python-version: 3.12
+      - run: pip install sim-atlas-toolkit
+        working-directory: ./package
+        shell: bash -l {0}
+      - run: |
+          which python
+          which pip
+          which sim-atlas-upload
+          pip list
+        shell: bash -l {0}
+      - name: upload package
+        run: |
+          sim-atlas-upload pyiron_workflow_lammps \
+            --api-url http://127.0.0.1:8000/api/v1 \
+            --api-token "$SIM_ATLAS_API_TOKEN" \
+            --log-level debug \
+            --no-embed \
+            --recursive filesystem
+        env:
+          PYTHONPATH: ${{ github.workspace }}/package
+        shell: bash -l {0}
+      - run: rm -rf package
+
+      # ---------------------------------------------------------------
       # pyiron_workflow_atomistics
       # ---------------------------------------------------------------
       - name: Set up Miniconda
