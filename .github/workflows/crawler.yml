@@ -76,7 +76,7 @@ jobs:
         shell: bash -l {0}
       - name: upload package
         run: |
-          sim-atlas-upload pyiron_workflow_lammps \
+          sim-atlas-upload pyiron_workflow_atomistics \
             --api-url http://127.0.0.1:8000/api/v1 \
             --api-token "$SIM_ATLAS_API_TOKEN" \
             --log-level debug \
