@@ -64,6 +64,28 @@ jobs:
         working-directory: ./package
       - run: rm -rf package
 
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          python-version: "3.12"
+          miniforge-version: latest
+          channels: conda-forge
+          channel-priority: strict
+          activate-environment: pyiron_workflow_atomistics
+      - name: Install packages
+        run: conda install -n pyiron_workflow_atomistics -c conda-forge pyiron_workflow_atomistics -y
+      - run: pip install sim-atlas-toolkit
+      - name: upload package
+        run: |
+          uv run sim-atlas-upload pyiron_workflow_atomistics \
+            --api-url http://127.0.0.1:8000/api/v1 \
+            --api-token "$SIM_ATLAS_API_TOKEN" \
+            --module-allow flowrep \
+            --log-level debug \
+            --no-embed \
+            --recursive filesystem
+      - run: rm -rf package
+
       - name: Checkout tensile_test
         uses: actions/checkout@v7
         with:
