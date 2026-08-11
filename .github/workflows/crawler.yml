@@ -53,7 +53,9 @@ jobs:
             --api-url http://127.0.0.1:8000/api/v1 \
             --api-token "$SIM_ATLAS_API_TOKEN" \
             --module-allow flowrep \
-            --log-level debug
+            --log-level debug \
+            --no-embed \
+            --recursive filesystem
         working-directory: ./package
 
       - run: ls sim-atlas
