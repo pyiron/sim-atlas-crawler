@@ -16,6 +16,11 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v7
 
+      - name: Conda config
+        shell: bash -l {0}
+        run: echo -e "channels:\n  - conda-forge\n" > .condarc
+
+
       - run: mkdir sim-atlas
       - run: mkdir package
 
@@ -58,7 +63,51 @@ jobs:
             --recursive filesystem
         working-directory: ./package
 
-      - run: ls sim-atlas
+      - run: uv venv --python=3.12
+        working-directory: ./package
+      - run: uv pip install "git+https://github.com/pyiron-node-store/hydrogenic"
+        working-directory: ./package
+      - run: uv pip install sim-atlas-toolkit
+        working-directory: ./package
+      - name: upload package
+        run: |
+          uv run sim-atlas-upload hydrogenic \
+            --api-url http://127.0.0.1:8000/api/v1 \
+            --api-token "$SIM_ATLAS_API_TOKEN" \
+            --module-allow flowrep \
+            --log-level debug \
+            --no-embed \
+            --recursive filesystem
+        working-directory: ./package
+      - run: rm -rf package
+
+      - name: Checkout tensile_test
+        uses: actions/checkout@v7
+        with:
+          repository: pyiron-node-store/tensile_test
+          path: package
+      - name: miniconda setup
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniforge-version: latest
+          activate-environment: damask-test
+          channel-priority: strict
+          environment-file: package/.ci_support/environment.yml
+          condarc-file: .condarc
+          python-version: 3.12
+      - run: pip install sim-atlas-toolkit
+        working-directory: ./package
+      - name: upload package
+        run: |
+          uv run sim-atlas-upload tensile_test \
+            --api-url http://127.0.0.1:8000/api/v1 \
+            --api-token "$SIM_ATLAS_API_TOKEN" \
+            --module-allow flowrep \
+            --log-level debug \
+            --no-embed \
+            --recursive filesystem
+        working-directory: ./package
+      - run: rm -rf package
 
       - uses: actions/upload-artifact@v7
         with:
