@@ -226,6 +226,39 @@ jobs:
         shell: bash -l {0}
       - run: rm -rf package/*
 
+      # ---------------------------------------------------------------
+      # pmd_tensile (materialdigital/pmd-demonstrator)
+      # ---------------------------------------------------------------
+      - name: Checkout pmd-demonstrator
+        uses: actions/checkout@v7
+        with:
+          repository: materialdigital/pmd-demonstrator
+          path: package
+      - name: miniconda setup
+        uses: conda-incubator/setup-miniconda@v4
+        with:
+          miniforge-version: latest
+          activate-environment: pmd-demonstrator
+          channel-priority: strict
+          environment-file: package/environment.yml
+          condarc-file: .condarc
+          python-version: 3.12
+      - run: pip install git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit
+        working-directory: ./package
+        shell: bash -l {0}
+      - name: upload package
+        run: |
+          sim-atlas-upload pmd_tensile.nodes \
+            --api-url http://127.0.0.1:8000/api/v1 \
+            --api-token "$SIM_ATLAS_API_TOKEN" \
+            --log-level debug \
+            --no-embed \
+            --recursive filesystem
+        env:
+          PYTHONPATH: ${{ github.workspace }}/package
+        shell: bash -l {0}
+      - run: rm -rf package/*
+
       - uses: actions/upload-artifact@v7
         with:
           path: sim-atlas/artifacts.json
