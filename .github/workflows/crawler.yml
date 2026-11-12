@@ -65,7 +65,7 @@ jobs:
           environment-file: package/.ci_support/environment.yml
           condarc-file: .condarc
           python-version: 3.12
-      - run: pip install git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit
+      - run: pip install "git+https://github.com/XzzX/sim_atlas#subdirectory=models" "git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit"
         working-directory: ./package
         shell: bash -l {0}
       - run: |
@@ -104,7 +104,7 @@ jobs:
           environment-file: package/.ci_support/environment.yml
           condarc-file: .condarc
           python-version: 3.12
-      - run: pip install git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit
+      - run: pip install "git+https://github.com/XzzX/sim_atlas#subdirectory=models" "git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit"
         working-directory: ./package
         shell: bash -l {0}
       - run: |
@@ -133,14 +133,14 @@ jobs:
         working-directory: ./package
       - run: uv pip install "git+https://github.com/pyiron-node-store/hydrogenic"
         working-directory: ./package
-      - run: uv pip install git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit
+      - run: uv pip install "git+https://github.com/XzzX/sim_atlas#subdirectory=models" "git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit"
         working-directory: ./package
       - name: upload package
         run: |
           uv run sim-atlas-upload hydrogenic \
             --api-url http://127.0.0.1:8000/api/v1 \
             --api-token "$SIM_ATLAS_API_TOKEN" \
-            --module-allow flowrep \
+            --allowed-modules flowrep \
             --log-level debug \
             --no-embed \
             --recursive filesystem
@@ -164,7 +164,7 @@ jobs:
           environment-file: package/.ci_support/environment.yml
           condarc-file: .condarc
           python-version: 3.12
-      - run: pip install git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit
+      - run: pip install "git+https://github.com/XzzX/sim_atlas#subdirectory=models" "git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit"
         working-directory: ./package
         shell: bash -l {0}
       - run: |
@@ -178,7 +178,7 @@ jobs:
           sim-atlas-upload tensile_test \
             --api-url http://127.0.0.1:8000/api/v1 \
             --api-token "$SIM_ATLAS_API_TOKEN" \
-            --module-allow flowrep \
+            --allowed-modules flowrep \
             --log-level debug \
             --no-embed \
             --recursive filesystem
@@ -204,7 +204,7 @@ jobs:
           environment-file: package/environment.yml
           condarc-file: .condarc
           python-version: 3.12
-      - run: pip install git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit
+      - run: pip install "git+https://github.com/XzzX/sim_atlas#subdirectory=models" "git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit"
         working-directory: ./package
         shell: bash -l {0}
       - run: |
@@ -216,6 +216,39 @@ jobs:
       - name: upload package
         run: |
           sim-atlas-upload semantic_workflows \
+            --api-url http://127.0.0.1:8000/api/v1 \
+            --api-token "$SIM_ATLAS_API_TOKEN" \
+            --log-level debug \
+            --no-embed \
+            --recursive filesystem
+        env:
+          PYTHONPATH: ${{ github.workspace }}/package
+        shell: bash -l {0}
+      - run: rm -rf package/*
+
+      # ---------------------------------------------------------------
+      # pmd_tensile (materialdigital/pmd-demonstrator)
+      # ---------------------------------------------------------------
+      - name: Checkout pmd-demonstrator
+        uses: actions/checkout@v7
+        with:
+          repository: materialdigital/pmd-demonstrator
+          path: package
+      - name: miniconda setup
+        uses: conda-incubator/setup-miniconda@v4
+        with:
+          miniforge-version: latest
+          activate-environment: pmd-demonstrator
+          channel-priority: strict
+          environment-file: package/environment.yml
+          condarc-file: .condarc
+          python-version: 3.12
+      - run: pip install "git+https://github.com/XzzX/sim_atlas#subdirectory=models" "git+https://github.com/XzzX/sim_atlas#subdirectory=toolkit"
+        working-directory: ./package
+        shell: bash -l {0}
+      - name: upload package
+        run: |
+          sim-atlas-upload pmd_tensile.nodes \
             --api-url http://127.0.0.1:8000/api/v1 \
             --api-token "$SIM_ATLAS_API_TOKEN" \
             --log-level debug \
