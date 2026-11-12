@@ -140,7 +140,7 @@ jobs:
           uv run sim-atlas-upload hydrogenic \
             --api-url http://127.0.0.1:8000/api/v1 \
             --api-token "$SIM_ATLAS_API_TOKEN" \
-            --module-allow flowrep \
+            --allowed-modules flowrep \
             --log-level debug \
             --no-embed \
             --recursive filesystem
@@ -178,7 +178,7 @@ jobs:
           sim-atlas-upload tensile_test \
             --api-url http://127.0.0.1:8000/api/v1 \
             --api-token "$SIM_ATLAS_API_TOKEN" \
-            --module-allow flowrep \
+            --allowed-modules flowrep \
             --log-level debug \
             --no-embed \
             --recursive filesystem
